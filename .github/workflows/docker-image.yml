@@ -1,0 +1,16 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  Docker-Image-Build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        cd docker
+        docker build . --file Dockerfile --tag go-crud:$(date +%s)
