@@ -9,12 +9,19 @@ jobs:
   Docker-Image-Build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build -t go-crud:$(date +%s) .
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      
+    - name: Docker Build   
+      run: |
+        docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
+      
     - name: Aqua Security Trivy
       uses: aquasecurity/trivy-action@0.2.2
       with:
-        scan-type: image
-        image-ref: go-crud:$(date +%s)
-        severity: HIGH,CRITICAL
+          image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
