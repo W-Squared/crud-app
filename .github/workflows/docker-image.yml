@@ -18,7 +18,6 @@ jobs:
         scan-type: image
         image-ref: go-crud:$(date +%s)
         format: 'table'
-        exit-code: '1'
         ignore-unfixed: true
-        vuln-type: 'os,library'
+        vuln-type: 'os'
         severity: 'CRITICAL,HIGH'
