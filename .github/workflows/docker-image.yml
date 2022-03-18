@@ -17,4 +17,4 @@ jobs:
       with:
         scan-type: image
         image-ref: go-crud:$(date +%s)
-        format: 'table'
+        severity: HIGH,CRITICAL
