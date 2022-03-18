@@ -13,9 +13,14 @@ jobs:
     - name: Build the Docker image
       run: |
         cd docker
-        docker build . --file Dockerfile --tag go-crud:$(date +%s)
+        docker build -t go-crud:$(date +%s) .
     - name: Aqua Security Trivy
       uses: aquasecurity/trivy-action@0.2.2
       with:
         scan-type: image
         image-ref: go-crud:$(date +%s)
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
