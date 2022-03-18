@@ -14,3 +14,8 @@ jobs:
       run: |
         cd docker
         docker build . --file Dockerfile --tag go-crud:$(date +%s)
+    - name: Aqua Security Trivy
+      uses: aquasecurity/trivy-action@0.2.2
+      with:
+        scan-type: image
+        image-ref: go-crud:$(date +%s)
