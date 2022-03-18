@@ -6,22 +6,28 @@ on:
     branches: [ main ]
 
 jobs:
-  Docker-Image-Build:
+  Docker-Image-Scan:
     runs-on: ubuntu-latest
+    name: Docker Image Scan
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
       
     - name: Docker Build   
       run: |
-        docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
+        docker build -t go-api:${{ github.sha }} .
       
-    - name: Aqua Security Trivy
+    - name: Trivy Vulnerability Scan
       uses: aquasecurity/trivy-action@0.2.2
       with:
-          image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
-          format: 'table'
-          exit-code: '1'
+          image-ref: 'go-api:${{ github.sha }}'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: 'trivy-results.sarif'
