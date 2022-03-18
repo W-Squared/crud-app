@@ -11,9 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: |
-        cd docker
-        docker build -t go-crud:$(date +%s) .
+      run: docker build -t go-crud:$(date +%s) .
     - name: Aqua Security Trivy
       uses: aquasecurity/trivy-action@0.2.2
       with:
