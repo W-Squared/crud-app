@@ -15,12 +15,12 @@ jobs:
       
     - name: Docker Build   
       run: |
-        docker build -t go-api:$(date) .
+        docker build -t go-api:1 .
       
     - name: Trivy Vulnerability Scan
       uses: aquasecurity/trivy-action@0.2.2
       with:
-          image-ref: 'go-api:$(date)'
+          image-ref: 'go-api:1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
@@ -43,7 +43,7 @@ jobs:
       
     - name: Docker Build   
       run: |
-        docker build -t go-api:$(date) .
+        docker build -t go-api:1 .
         
     - name: Install doctl 
       uses: digitalocean/action-doctl@v2
@@ -55,8 +55,8 @@ jobs:
       
     - name: Tag image 
       run:
-        docker tag go-api:${{ github.sha }} \
-        registry.digitalocean.com/williamsquared/go-api:$(date)
+        docker tag go-api:1 \
+        registry.digitalocean.com/williamsquared/go-api:1
         
     - name: Push image to Digital Ocean Container Registry 
-      run: docker push registry.digitalocean.com/williamsquared/go-api:$(date)
+      run: docker push registry.digitalocean.com/williamsquared/go-api:1
