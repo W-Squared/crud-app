@@ -31,3 +31,30 @@ jobs:
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: 'trivy-results.sarif'
+
+  Docker-Image-Push:
+    runs-on: ubuntu-latest
+    name: Docker Image Push
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      
+    - name: Docker Build   
+      run: |
+        docker build -t go-api:${{ github.sha }} .
+        
+    - name: Install doctl 
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        
+    - name: Log in to DO Container Registry 
+      run: doctl registry login --expiry-seconds 600
+      
+    - name: Tag image 
+      run:
+        docker tag go-api:${{ github.sha }} \
+        registry.digitalocean.com/williamsquared/go-api:${{ github.sha }}
+        
+    - name: Push image to Digital Ocean Container Registry 
+      run: docker push registry.digitalocean.com/williamsquared/go-api:${{ github.sha }}
