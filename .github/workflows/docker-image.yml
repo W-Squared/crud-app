@@ -33,6 +33,8 @@ jobs:
         sarif_file: 'trivy-results.sarif'
 
   Docker-Image-Push:
+    if: ${{ always() }}
+    needs: [Docker-Image-Scan]
     runs-on: ubuntu-latest
     name: Docker Image Push
     steps:
